@@ -1,0 +1,5 @@
+import { NextResponse } from 'next/server';
+import { getBootstrapData } from '@/lib/db';
+import { getSessionFromCookies } from '@/lib/auth';
+import { jsonError } from '@/lib/http';
+export async function GET() { try { const authenticated = await getSessionFromCookies(); if (!authenticated) return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 }); const data = await getBootstrapData(); return NextResponse.json({ summary: { clubName: data.summary.club_name, openingBalance: Number(data.summary.opening_balance || 0), totalGains: Number(data.summary.total_gains || 0), totalExpenses: Number(data.summary.total_expenses || 0), currentFunds: Number(data.summary.current_funds || 0) }, months: data.months.map((item) => ({ ...item, gains: Number(item.gains || 0), expenses: Number(item.expenses || 0) })), ledger: data.ledger.map((item) => ({ ...item, amount: Number(item.amount || 0) })), donations: data.donations.map((item) => ({ ...item, amount: Number(item.amount || 0) })), expenses: data.expenses.map((item) => ({ ...item, amount: Number(item.amount || 0) })) }); } catch (error) { return jsonError(error, 'Could not load dashboard data.'); } }
