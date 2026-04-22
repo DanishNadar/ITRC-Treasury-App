@@ -1,0 +1,7 @@
+import { NextResponse } from 'next/server';
+import { getSessionFromCookies } from '@/lib/auth';
+import { createExpense, getExpenses } from '@/lib/db';
+import { jsonError } from '@/lib/http';
+import { optionalText, parseMoney, requireDate, requireText } from '@/lib/validators';
+export async function GET() { try { const authenticated = await getSessionFromCookies(); if (!authenticated) return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 }); const expenses = await getExpenses(); return NextResponse.json({ expenses: expenses.map((item) => ({ ...item, amount: Number(item.amount || 0) })) }); } catch (error) { return jsonError(error, 'Could not load expenses.'); } }
+export async function POST(request) { try { const authenticated = await getSessionFromCookies(); if (!authenticated) return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 }); const body = await request.json(); const expense = await createExpense({ amount: parseMoney(body.amount), expense_date: requireDate(body.expense_date, 'Expense date'), description: requireText(body.description, 'Expense description'), person_name: requireText(body.person_name, 'Name of person making the expense'), company_name: optionalText(body.company_name), company_rep: optionalText(body.company_rep) }); return NextResponse.json({ expense: { ...expense, amount: Number(expense.amount || 0) } }); } catch (error) { return jsonError(error, 'Could not create expense.'); } }

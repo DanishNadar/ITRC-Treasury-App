@@ -1,0 +1,8 @@
+import { NextResponse } from 'next/server';
+import { getSessionFromCookies } from '@/lib/auth';
+import { deleteExpense, updateExpense } from '@/lib/db';
+import { ValidationError } from '@/lib/errors';
+import { jsonError } from '@/lib/http';
+import { optionalText, parseMoney, requireDate, requireText } from '@/lib/validators';
+export async function PATCH(request, { params }) { try { const authenticated = await getSessionFromCookies(); if (!authenticated) return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 }); const body = await request.json(); const expense = await updateExpense(params.id, { amount: parseMoney(body.amount), expense_date: requireDate(body.expense_date, 'Expense date'), description: requireText(body.description, 'Expense description'), person_name: requireText(body.person_name, 'Name of person making the expense'), company_name: optionalText(body.company_name), company_rep: optionalText(body.company_rep) }); if (!expense) throw new ValidationError('Expense record not found.'); return NextResponse.json({ expense: { ...expense, amount: Number(expense.amount || 0) } }); } catch (error) { return jsonError(error, 'Could not update expense.'); } }
+export async function DELETE(_request, { params }) { try { const authenticated = await getSessionFromCookies(); if (!authenticated) return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 }); const deleted = await deleteExpense(params.id); if (!deleted) throw new ValidationError('Expense record not found.'); return NextResponse.json({ ok: true, id: deleted.id }); } catch (error) { return jsonError(error, 'Could not delete expense.'); } }

@@ -1,0 +1,16 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/bootstrap/route": "app/api/bootstrap/route.js",
+  "/api/donations/[id]/route": "app/api/donations/[id]/route.js",
+  "/api/expenses/[id]/route": "app/api/expenses/[id]/route.js",
+  "/api/donations/route": "app/api/donations/route.js",
+  "/api/expenses/route": "app/api/expenses/route.js",
+  "/api/health/route": "app/api/health/route.js",
+  "/api/ledger/route": "app/api/ledger/route.js",
+  "/api/login/route": "app/api/login/route.js",
+  "/api/logout/route": "app/api/logout/route.js",
+  "/api/settings/route": "app/api/settings/route.js",
+  "/api/summary/route": "app/api/summary/route.js",
+  "/page": "app/page.js",
+  "/login/page": "app/login/page.js"
+}

@@ -1,0 +1,16 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/api/bootstrap/route": "/api/bootstrap",
+  "/api/donations/[id]/route": "/api/donations/[id]",
+  "/api/expenses/[id]/route": "/api/expenses/[id]",
+  "/api/donations/route": "/api/donations",
+  "/api/expenses/route": "/api/expenses",
+  "/api/health/route": "/api/health",
+  "/api/ledger/route": "/api/ledger",
+  "/api/login/route": "/api/login",
+  "/api/logout/route": "/api/logout",
+  "/api/settings/route": "/api/settings",
+  "/api/summary/route": "/api/summary",
+  "/page": "/",
+  "/login/page": "/login"
+}
